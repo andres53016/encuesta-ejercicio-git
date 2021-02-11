@@ -7,15 +7,19 @@ import java.util.Scanner;
 
 public class Main {
 	public static void main(String [] args) {
+		String archivo_encuesta = args[0];
+		String archivo_salida = args[1];
+//		String archivo_salida = "/tmp/encuesta.csv";
 		Encuesta encuesta_1 = new Encuesta();
 		Scanner inputs = new Scanner(System.in);
 		List<Pregunta> preguntas = new ArrayList();
-		Pregunta pregunta_tmp = new Pregunta("Que color te gusta?");
+		Pregunta pregunta_tmp = new Pregunta("Que colores te gustan? Ingrese opciones separada por espacios");
 		pregunta_tmp.addOpcion("Negro");
 		pregunta_tmp.addOpcion("Rojo");
 		pregunta_tmp.addOpcion("Verde");
 		pregunta_tmp.addOpcion("Azul");
 		pregunta_tmp.addOpcion("otro");
+		pregunta_tmp.setTipo(1);
 		preguntas.add(pregunta_tmp);
 		
 		pregunta_tmp = new Pregunta("Cual es tu deporte favorito?");
@@ -23,12 +27,14 @@ public class Main {
 		pregunta_tmp.addOpcion("Basquet");
 		pregunta_tmp.addOpcion("Volley");
 		pregunta_tmp.addOpcion("otro");
+		pregunta_tmp.setTipo(0);
 		preguntas.add(pregunta_tmp);
 		
 		pregunta_tmp = new Pregunta("Tu sexo?");
 		pregunta_tmp.addOpcion("Masculino");
 		pregunta_tmp.addOpcion("Femenino");
 		pregunta_tmp.addOpcion("Otro");
+		pregunta_tmp.setTipo(0);
 		preguntas.add(pregunta_tmp);
 		
 		pregunta_tmp = new Pregunta("Tu edad en que rango está?");
@@ -37,23 +43,59 @@ public class Main {
 		pregunta_tmp.addOpcion("Entre 30 y 40");
 		pregunta_tmp.addOpcion("Entre 40 y 50");
 		pregunta_tmp.addOpcion("Mayor a 50");
+		pregunta_tmp.setTipo(0);
 	    preguntas.add(pregunta_tmp);
-	    
+	     
+	    encuesta_1.setPregunta(preguntas);
 	    List<String> respuesta_dada = new ArrayList();
 	    int i=0;
 	    String nombre;
 	    System.out.println("Cual es tu nombre");
 	    nombre=inputs.nextLine();
+	    String respuesta_tmp;
 	    respuesta_dada.add(nombre);
-	    
-	    for(Pregunta pregunta:preguntas)
+	    Pregunta pregunta;
+	    while(i< preguntas.size())
 	    {
+	      pregunta=preguntas.get(i);
 	      pregunta.PrintPregunta();
-	      respuesta_dada.add(Integer.toString(inputs.nextInt()));
+	      respuesta_tmp=inputs.nextLine();
+	      if(pregunta.getTipo()==0)
+	      {
+	    	  try
+	    	  {
+	    		  if(pregunta.compruebaRespuesta(respuesta_tmp)==0)
+	    		  {
+	    			  respuesta_dada.add(respuesta_tmp);
+	    			  i++;
+	    		  }
+	    			  
+	    	  }
+	    	  catch(Exception e)
+	    	  {
+	    		  System.out.println(e);
+	    	  }
+	      }
+	      else
+	      {
+	    	  try
+	    	  {
+	    		  if(pregunta.compruebaRespuesta(respuesta_tmp)==0)
+	    		  {
+	    			  respuesta_dada.add(respuesta_tmp);
+	    			  i++;
+	    		  }
+		    		    
+	    	  }
+	    	  catch(Exception e)
+	    	  {
+	    		  System.out.println(e);
+	    	  }
+	      }
 	    }
 	    
 	    try {
-	    	FileWriter csvWriter = new FileWriter("/tmp/encuesta.csv");
+	    	FileWriter csvWriter = new FileWriter(archivo_salida);
 	    	csvWriter.append("Nombre");
 	        csvWriter.append(",");
 	        csvWriter.append("respuesta0");

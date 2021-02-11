@@ -3,6 +3,13 @@ import java.util.List;
 public class Encuesta {
 	private String nombre;
 	private List<Pregunta> pregunta;
+	private int tipo;
+	public int getTipo() {
+		return tipo;
+	}
+	public void setTipo(int tipo) {
+		this.tipo = tipo;
+	}
 	public void Encuesta(String nombre) {
 		this.setNombre(nombre);
 	}
