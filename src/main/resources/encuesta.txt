@@ -1,0 +1,23 @@
+encuesta1
+0
+#Que colores te gustan? Ingrese opciones separada por espacios
+Negro
+Rojo
+Verde
+Azul
+Otro
+%Cual es tu deporte favorito?
+Futbol
+Basquet
+Volley
+otro
+%Tu sexo?
+Masculino
+Femenino
+Otro
+%Tu edad en que rango está?
+Menor a 20
+Entre 20 y 30
+Entre 30 y 40
+Entre 40 y 50
+Mayor a 50

@@ -1,8 +1,10 @@
 package ar.edu.cpci.curso;
 
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -13,39 +15,49 @@ public class Main {
 		Encuesta encuesta_1 = new Encuesta();
 		Scanner inputs = new Scanner(System.in);
 		List<Pregunta> preguntas = new ArrayList();
-		Pregunta pregunta_tmp = new Pregunta("Que colores te gustan? Ingrese opciones separada por espacios");
-		pregunta_tmp.addOpcion("Negro");
-		pregunta_tmp.addOpcion("Rojo");
-		pregunta_tmp.addOpcion("Verde");
-		pregunta_tmp.addOpcion("Azul");
-		pregunta_tmp.addOpcion("otro");
-		pregunta_tmp.setTipo(1);
-		preguntas.add(pregunta_tmp);
-		
-		pregunta_tmp = new Pregunta("Cual es tu deporte favorito?");
-		pregunta_tmp.addOpcion("Futbol");
-		pregunta_tmp.addOpcion("Basquet");
-		pregunta_tmp.addOpcion("Volley");
-		pregunta_tmp.addOpcion("otro");
-		pregunta_tmp.setTipo(0);
-		preguntas.add(pregunta_tmp);
-		
-		pregunta_tmp = new Pregunta("Tu sexo?");
-		pregunta_tmp.addOpcion("Masculino");
-		pregunta_tmp.addOpcion("Femenino");
-		pregunta_tmp.addOpcion("Otro");
-		pregunta_tmp.setTipo(0);
-		preguntas.add(pregunta_tmp);
-		
-		pregunta_tmp = new Pregunta("Tu edad en que rango está?");
-		pregunta_tmp.addOpcion("Menor a 20");
-		pregunta_tmp.addOpcion("Entre 20 y 30");
-		pregunta_tmp.addOpcion("Entre 30 y 40");
-		pregunta_tmp.addOpcion("Entre 40 y 50");
-		pregunta_tmp.addOpcion("Mayor a 50");
-		pregunta_tmp.setTipo(0);
-	    preguntas.add(pregunta_tmp);
-	     
+		try
+		{
+			BufferedReader reader_encuesta = new BufferedReader (new FileReader(archivo_encuesta));
+			String line;
+			Pregunta pregunta_tmp = new Pregunta("");
+			encuesta_1.setNombre(reader_encuesta.readLine());
+			encuesta_1.setTipo(Integer.parseInt(reader_encuesta.readLine()));
+			if(encuesta_1.isCorregible())
+			{
+				encuesta_1.setRespuesta_correcta(reader_encuesta.readLine().split(","));
+			}
+			while ((line = reader_encuesta.readLine()) != null) {
+				
+				if(line.charAt(0)=='#')
+				{
+					if(pregunta_tmp.getTexto().length()>0)
+					{
+						preguntas.add(pregunta_tmp);
+					}
+					pregunta_tmp = new Pregunta(line.substring(1));
+					pregunta_tmp.setTipo(1);
+				}
+				else if(line.charAt(0)=='%')
+				{
+					if(pregunta_tmp.getTexto().length()>0)
+					{
+						preguntas.add(pregunta_tmp);
+					}
+					pregunta_tmp = new Pregunta(line.substring(1));
+					pregunta_tmp.setTipo(0);
+				}
+				else
+				{
+					pregunta_tmp.addOpcion(line);
+				}
+			}
+			preguntas.add(pregunta_tmp);
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+			System.exit(0);
+		}
 	    encuesta_1.setPregunta(preguntas);
 	    List<String> respuesta_dada = new ArrayList();
 	    int i=0;
@@ -55,9 +67,10 @@ public class Main {
 	    String respuesta_tmp;
 	    respuesta_dada.add(nombre);
 	    Pregunta pregunta;
-	    while(i< preguntas.size())
+	    String respuesta_correcta;
+	    while(i< encuesta_1.getPregunta().size())
 	    {
-	      pregunta=preguntas.get(i);
+	      pregunta=encuesta_1.getPregunta().get(i);
 	      pregunta.PrintPregunta();
 	      respuesta_tmp=inputs.nextLine();
 	      if(pregunta.getTipo()==0)
@@ -66,6 +79,18 @@ public class Main {
 	    	  {
 	    		  if(pregunta.compruebaRespuesta(respuesta_tmp)==0)
 	    		  {
+	    			  if(encuesta_1.isCorregible())
+	    			  {
+	    				  respuesta_correcta=encuesta_1.getRespuesta_correcta()[i];
+	    				  if(respuesta_correcta.equals(respuesta_tmp))
+	    				  {
+	    					  System.out.println("Respuesta Correcta");
+	    				  }
+	    				  else
+	    				  {
+	    					  System.out.println("Respuesta Incorrecta");
+	    				  }
+	    			  }
 	    			  respuesta_dada.add(respuesta_tmp);
 	    			  i++;
 	    		  }
@@ -82,6 +107,18 @@ public class Main {
 	    	  {
 	    		  if(pregunta.compruebaRespuesta(respuesta_tmp)==0)
 	    		  {
+	    			  if(encuesta_1.isCorregible())
+	    			  {
+	    				  respuesta_correcta=encuesta_1.getRespuesta_correcta()[i];
+	    				  if(respuesta_correcta==respuesta_tmp)
+	    				  {
+	    					  System.out.println("Respuesta Correcta");
+	    				  }
+	    				  else
+	    				  {
+	    					  System.out.println("Respuesta Incorrecta");
+	    				  }
+	    			  }
 	    			  respuesta_dada.add(respuesta_tmp);
 	    			  i++;
 	    		  }
@@ -114,6 +151,7 @@ public class Main {
 	    	System.out.println("hubo algun error");
 			// TODO: handle exception
 		}
+
 	    System.out.println(respuesta_dada);
 	}
 }

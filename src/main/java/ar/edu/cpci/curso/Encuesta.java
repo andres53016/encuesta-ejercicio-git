@@ -4,6 +4,13 @@ public class Encuesta {
 	private String nombre;
 	private List<Pregunta> pregunta;
 	private int tipo;
+	private String[] respuesta_correcta;
+	public String[] getRespuesta_correcta() {
+		return respuesta_correcta;
+	}	
+	public void setRespuesta_correcta(String[] respuesta_correcta) {
+		this.respuesta_correcta = respuesta_correcta;
+	}
 	public int getTipo() {
 		return tipo;
 	}
@@ -25,5 +32,11 @@ public class Encuesta {
 	public void setPregunta(List<Pregunta> pregunta) {
 		this.pregunta = pregunta;
 	}
-	
+	public boolean isCorregible()
+	{
+		if(this.getTipo()==1)
+			return true;
+		else
+			return false;
+	}
 }

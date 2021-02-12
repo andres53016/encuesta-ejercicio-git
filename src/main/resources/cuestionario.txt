@@ -1,0 +1,20 @@
+cuestionario1
+1
+3,2,5
+%De que color es el cielo
+Negro
+Rojo
+Verde
+Azul
+Otro
+%Que deporte practica Ginobili
+Futbol
+Basquet
+Volley
+otro
+%Que edad tiene el presidente
+Menor a 20
+Entre 20 y 30
+Entre 30 y 40
+Entre 40 y 50
+Mayor a 50
